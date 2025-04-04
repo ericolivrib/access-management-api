@@ -18,6 +18,8 @@ import java.security.interfaces.RSAPublicKey;
 @Configuration
 public class JwtConfig {
 
+    public static final int JWT_EXPIRATION_TIME = 86400;
+
     @Value("${api.jwt.private-key}")
     RSAPrivateKey privateKey;
 

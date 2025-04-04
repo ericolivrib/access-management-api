@@ -25,7 +25,7 @@ public class SecurityConfig {
                 .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults()))
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs*/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/v1/auth/sign-in").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/v1/login").permitAll()
                         .anyRequest().authenticated())
                 .build();
     }
