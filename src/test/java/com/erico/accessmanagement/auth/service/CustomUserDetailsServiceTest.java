@@ -15,7 +15,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -81,6 +80,7 @@ class CustomUserDetailsServiceTest {
         // Act & Assert
         Exception ex = assertThrows(UsernameNotFoundException.class, () -> underTest.loadUserByUsername(email));
 
+        // Assert
         verify(userRepository, times(1)).findByEmail(email);
         assertEquals("E-mail or password incorrect", ex.getMessage());
     }
