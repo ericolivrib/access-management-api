@@ -13,6 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -20,8 +21,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class CustomUserDetailsServiceTest {
@@ -35,16 +35,14 @@ class CustomUserDetailsServiceTest {
     @Captor
     ArgumentCaptor<String> emailCaptor;
 
+    String email;
+
+    User user;
+
     @BeforeEach
     void setUp() {
-    }
-
-    @Test
-    void shouldReturnUserDetails_withSuccess() {
-        // Arrange
-        String email = "erico.ribeiro@email.com";
-
-        User user = User.builder()
+        email = "erico.ribeiro@email.com";
+        user = User.builder()
                 .id(UUID.randomUUID())
                 .name("Érico Ribeiro")
                 .email(email)
@@ -52,24 +50,38 @@ class CustomUserDetailsServiceTest {
                 .role(new Role(2, RoleLabel.COMMON, null))
                 .approved(true)
                 .build();
+    }
 
-        when(userRepository.findByEmail(email))
-                .thenReturn(Optional.of(user));
+    @Test
+    void shouldReturnUserDetails() {
+        // Arrange
+        when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
 
         // Act
         UserDetails userDetails = underTest.loadUserByUsername(email);
 
         // Assert
+        verify(userRepository, times(1)).findByEmail(emailCaptor.capture());
+
         assertNotNull(userDetails);
         assertEquals(email, userDetails.getUsername());
-
-        verify(userRepository).findByEmail(emailCaptor.capture());
-        assertEquals(email, emailCaptor.getValue());
         assertEquals(user.getPassword(), userDetails.getPassword());
         assertTrue(user.isApproved());
         assertTrue(userDetails.getAuthorities()
                 .stream()
                 .allMatch(authority ->
                         authority.getAuthority().equals("ROLE_" + user.getRole().getLabel())));
+    }
+
+    @Test
+    void shouldThrowExceptionWhenUserNotFound() {
+        // Arrange
+        when(userRepository.findByEmail(email)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        Exception ex = assertThrows(UsernameNotFoundException.class, () -> underTest.loadUserByUsername(email));
+
+        verify(userRepository, times(1)).findByEmail(email);
+        assertEquals("E-mail or password incorrect", ex.getMessage());
     }
 }
