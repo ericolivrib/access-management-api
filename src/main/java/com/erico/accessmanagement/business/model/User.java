@@ -1,15 +1,12 @@
 package com.erico.accessmanagement.business.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.UUID;
 
 @Entity
-@Getter
+@Data
 @Builder
 @Table(name = "users")
 @NoArgsConstructor
@@ -31,9 +28,11 @@ public class User {
     private String password;
 
     @Column(name = "approved")
-    private boolean approved;
+    private Boolean approved;
 
+    @Setter
     @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;
+
 }
