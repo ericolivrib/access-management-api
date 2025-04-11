@@ -65,7 +65,7 @@ class CustomUserDetailsServiceTest {
         assertNotNull(userDetails);
         assertEquals(email, userDetails.getUsername());
         assertEquals(user.getPassword(), userDetails.getPassword());
-        assertTrue(user.isApproved());
+        assertTrue(user.getApproved());
         assertTrue(userDetails.getAuthorities()
                 .stream()
                 .allMatch(authority ->
