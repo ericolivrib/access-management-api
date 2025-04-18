@@ -3,6 +3,7 @@ package com.erico.accessmanagement.business.service;
 import com.erico.accessmanagement.business.dto.NewUserDto;
 import com.erico.accessmanagement.business.exception.EntityAlreadyExistsException;
 import com.erico.accessmanagement.business.mapper.UserMapper;
+import com.erico.accessmanagement.business.model.RegistrationStatus;
 import com.erico.accessmanagement.business.model.Role;
 import com.erico.accessmanagement.business.model.RoleLabel;
 import com.erico.accessmanagement.business.model.User;
@@ -35,6 +36,7 @@ public class UserService {
         User user = userMapper.mapToEntity(newUserDto);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole(commonRole);
+        user.setRegistrationStatus(RegistrationStatus.NOT_CONFIRMED);
 
         userRepository.save(user);
         return user.getId();

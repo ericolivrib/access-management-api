@@ -3,6 +3,7 @@ package com.erico.accessmanagement.business.service;
 import com.erico.accessmanagement.business.dto.NewUserDto;
 import com.erico.accessmanagement.business.exception.EntityAlreadyExistsException;
 import com.erico.accessmanagement.business.mapper.UserMapper;
+import com.erico.accessmanagement.business.model.RegistrationStatus;
 import com.erico.accessmanagement.business.model.Role;
 import com.erico.accessmanagement.business.model.RoleLabel;
 import com.erico.accessmanagement.business.model.User;
@@ -107,6 +108,7 @@ class UserServiceTest {
             mappedUser.setRole(commonRole);
             mappedUser.setPassword(passwordEncoder.encode(mappedUser.getPassword()));
             mappedUser.setId(UUID.randomUUID());
+            mappedUser.setRegistrationStatus(RegistrationStatus.NOT_CONFIRMED);
 
             when(userRepository.save(mappedUser))
                     .thenReturn(mappedUser);
@@ -120,6 +122,7 @@ class UserServiceTest {
             assertEquals(userId, userCaptor.getValue().getId());
             assertEquals(RoleLabel.USER, userCaptor.getValue().getRole().getLabel());
             assertEquals(mappedUser.getPassword(), userCaptor.getValue().getPassword());
+            assertEquals(RegistrationStatus.NOT_CONFIRMED, userCaptor.getValue().getRegistrationStatus());
             assertNull(userCaptor.getValue().getApproved());
         }
 
