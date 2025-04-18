@@ -2,6 +2,7 @@ package com.erico.accessmanagement.business.controller;
 
 
 import com.erico.accessmanagement.business.dto.NewUserDto;
+import com.erico.accessmanagement.business.exception.EntityAlreadyExistsException;
 import com.erico.accessmanagement.business.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -56,7 +57,7 @@ class UserControllerTest {
     }
 
     @Test
-    void whenCreateUser_thenReturnOkStatusAndLocationHeader() throws Exception {
+    void whenCreateUser_thenReturn201CreatedStatusWithLocationHeader() throws Exception {
         UUID userId = UUID.randomUUID();
         Mockito.when(userService.createUser(Mockito.eq(newUserDto))).thenReturn(userId);
 
@@ -69,5 +70,19 @@ class UserControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(header().exists(HttpHeaders.LOCATION))
                 .andExpect(content().string(""));
+    }
+
+    @Test
+    void whenCreateUser_thenThrow409ConflictStatusWithErrorMessage() throws Exception {
+        String requestBody = objectMapper.writeValueAsString(newUserDto);
+        String expectedErrorMessage = "User with email " + newUserDto.email() + " already exists";
+
+        Mockito.doThrow(new EntityAlreadyExistsException(expectedErrorMessage))
+                .when(userService)
+                .createUser(Mockito.eq(newUserDto));
+
+        mockMvc.perform(post("/v1/users").contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.message").value(expectedErrorMessage));
     }
 }

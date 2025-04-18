@@ -4,6 +4,8 @@ import com.erico.accessmanagement.business.dto.NewUserDto;
 import com.erico.accessmanagement.business.service.UserService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,7 +26,11 @@ public class UserController {
     @PostMapping
     public ResponseEntity<Void> createUser(@RequestBody @Valid NewUserDto newUserDto, UriComponentsBuilder uriBuilder) {
         UUID userId = userService.createUser(newUserDto);
-        URI uri = uriBuilder.path("/v1/users/{id}").buildAndExpand(userId).toUri();
-        return ResponseEntity.created(uri).build();
+
+        String uri = uriBuilder.path("/v1/users/{id}").buildAndExpand(userId).toUriString();
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .header(HttpHeaders.LOCATION, uri)
+                .build();
     }
 }
