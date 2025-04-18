@@ -2,6 +2,7 @@ package com.erico.accessmanagement.business.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 public record NewUserDto(
         @NotBlank
@@ -13,6 +14,7 @@ public record NewUserDto(
 
         // TODO: Create RegEx for password
         @NotBlank
+        @Size(min = 8)
         String password
 ) {
 }

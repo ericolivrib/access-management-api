@@ -6,18 +6,15 @@ import com.erico.accessmanagement.business.exception.EntityAlreadyExistsExceptio
 import com.erico.accessmanagement.business.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 
 import org.junit.jupiter.api.Test;
 
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatcher;
-import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
@@ -27,6 +24,9 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.UUID;
 
@@ -84,5 +84,18 @@ class UserControllerTest {
         mockMvc.perform(post("/v1/users").contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.message").value(expectedErrorMessage));
+    }
+
+    @Test
+    void whenCreateUser_thenThrow422UnprocessableEntityStatusWithFieldErrors() throws Exception {
+        NewUserDto userWithWrongFields = new NewUserDto("", "john.doe", "pass");
+        String requestBody = objectMapper.writeValueAsString(userWithWrongFields);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/v1/users").contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isUnprocessableEntity())
+                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$[*].field").value(Matchers.hasItems("name", "email", "password")));
+
     }
 }
