@@ -18,14 +18,15 @@ public class CustomUserDetailsService implements UserDetailsService {
     private final UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(final String email) throws UsernameNotFoundException {
-        final User user = userRepository.findByEmail(email)
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("E-mail or password incorrect"));
 
-        final String authorities = "ROLE_" + user.getRole().getLabel().name();
+        String role = user.getRole().getLabel().name();
 
         return withUsername(email).password(user.getPassword())
-                .authorities(authorities)
+                .roles(role)
+                .authorities(role)
                 .build();
     }
 }

@@ -21,10 +21,10 @@ public class JwtService {
     private final JwtEncoder jwtEncoder;
     private final JwtDecoder jwtDecoder;
 
-    public String generateJwt(final User user) {
-        final String issuerClaim = "access-management";
+    public String generateJwt(User user) {
+        String issuerClaim = "access-management";
 
-        final String scopesClaim = user.getAuthorities()
+        String scopesClaim = user.getAuthorities()
                 .stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(" "));
@@ -39,7 +39,7 @@ public class JwtService {
         return jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
     }
 
-    public String getSubject(final String token) {
+    public String getSubject(String token) {
         return jwtDecoder.decode(token).getSubject();
     }
 }

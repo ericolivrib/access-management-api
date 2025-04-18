@@ -27,12 +27,12 @@ public class LoginController {
     }
 
     @PostMapping
-    public ResponseEntity<JwtResponseDto> signIn(@RequestBody final SignInDto signInDto) {
-        final Authentication authentication = authenticationManager.authenticate(
+    public ResponseEntity<JwtResponseDto> signIn(@RequestBody SignInDto signInDto) {
+        Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(signInDto.email(), signInDto.password()));
 
-        final User user = (User) authentication.getPrincipal();
-        final String token = jwtService.generateJwt(user);
+        User user = (User) authentication.getPrincipal();
+        String token = jwtService.generateJwt(user);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new JwtResponseDto(token));
