@@ -6,6 +6,7 @@ import com.erico.accessmanagement.business.mapper.UserMapper;
 import com.erico.accessmanagement.business.model.Role;
 import com.erico.accessmanagement.business.model.RoleLabel;
 import com.erico.accessmanagement.business.model.User;
+import com.erico.accessmanagement.business.repository.RoleRepository;
 import com.erico.accessmanagement.business.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -38,6 +39,9 @@ class UserServiceTest {
     UserRepository userRepository;
 
     @Mock
+    RoleRepository roleRepository;
+
+    @Mock
     UserMapper userMapper;
 
     @Captor
@@ -57,7 +61,8 @@ class UserServiceTest {
         @BeforeEach
         void setUp() {
             commonRole = Role.builder()
-                    .label(RoleLabel.COMMON)
+                    .id(2)
+                    .label(RoleLabel.USER)
                     .build();
 
             newUserDto = new NewUserDto(
@@ -88,6 +93,9 @@ class UserServiceTest {
             when(userRepository.findByEmail(newUserDto.email()))
                     .thenReturn(Optional.empty());
 
+            when(roleRepository.getReferenceByLabel(RoleLabel.USER))
+                    .thenReturn(commonRole);
+
             when(userMapper.mapToEntity(newUserDto))
                     .thenReturn(mappedUser);
 
@@ -110,7 +118,7 @@ class UserServiceTest {
             verify(userRepository).save(userCaptor.capture());
             assertNotNull(userCaptor.getValue().getId());
             assertEquals(userId, userCaptor.getValue().getId());
-            assertEquals(RoleLabel.COMMON, userCaptor.getValue().getRole().getLabel());
+            assertEquals(RoleLabel.USER, userCaptor.getValue().getRole().getLabel());
             assertEquals(mappedUser.getPassword(), userCaptor.getValue().getPassword());
             assertNull(userCaptor.getValue().getApproved());
         }

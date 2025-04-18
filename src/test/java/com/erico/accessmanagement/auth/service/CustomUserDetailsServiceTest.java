@@ -46,7 +46,7 @@ class CustomUserDetailsServiceTest {
                 .name("Érico Ribeiro")
                 .email(email)
                 .password(new BCryptPasswordEncoder().encode("123456"))
-                .role(new Role(2, RoleLabel.COMMON, null))
+                .role(new Role(2, RoleLabel.USER, null))
                 .approved(true)
                 .build();
     }
