@@ -16,7 +16,8 @@ public interface UserMapper {
     @Mappings(value = {
             @Mapping(target = "id", ignore = true),
             @Mapping(target = "role", ignore = true),
-            @Mapping(target = "approved", ignore = true)
+            @Mapping(target = "approved", ignore = true),
+            @Mapping(target = "registrationStatus", ignore = true)
     })
     User mapToEntity(NewUserDto newUserDto);
 }

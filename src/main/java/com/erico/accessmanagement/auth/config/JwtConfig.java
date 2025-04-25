@@ -21,10 +21,10 @@ public class JwtConfig {
     public static final int JWT_EXPIRATION_TIME = 86400;
 
     @Value("${api.jwt.private-key}")
-    RSAPrivateKey privateKey;
+    private RSAPrivateKey privateKey;
 
     @Value("${api.jwt.public-key}")
-    RSAPublicKey publicKey;
+    private RSAPublicKey publicKey;
 
     @Bean
     JwtEncoder jwtEncoder() {
