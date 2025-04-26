@@ -1,6 +1,6 @@
 package com.erico.accessmanagement.business.service;
 
-import com.erico.accessmanagement.business.dto.NewUserDto;
+import com.erico.accessmanagement.business.dto.CreateUserDto;
 import com.erico.accessmanagement.business.exception.EntityAlreadyExistsException;
 import com.erico.accessmanagement.business.mapper.UserMapper;
 import com.erico.accessmanagement.business.model.*;
@@ -21,12 +21,12 @@ public class UserService {
     private final UserMapper userMapper;
 
     @Transactional
-    public UUID createUser(NewUserDto newUserDto) {
-        userRepository.findByEmail(newUserDto.email()).ifPresent((u) -> {
+    public UUID createUser(CreateUserDto createUserDto) {
+        userRepository.findByEmail(createUserDto.email()).ifPresent((u) -> {
             throw new EntityAlreadyExistsException("User with email " + u.getEmail() + " already exists");
         });
 
-        User user = userMapper.mapToEntity(newUserDto);
+        User user = userMapper.mapToEntity(createUserDto);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole(Role.USER);
 

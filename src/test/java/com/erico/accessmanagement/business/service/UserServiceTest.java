@@ -1,6 +1,6 @@
 package com.erico.accessmanagement.business.service;
 
-import com.erico.accessmanagement.business.dto.NewUserDto;
+import com.erico.accessmanagement.business.dto.CreateUserDto;
 import com.erico.accessmanagement.business.exception.EntityAlreadyExistsException;
 import com.erico.accessmanagement.business.mapper.UserMapper;
 import com.erico.accessmanagement.business.model.*;
@@ -44,7 +44,7 @@ class UserServiceTest {
     @Nested
     class CreateUser {
 
-        NewUserDto newUserDto;
+        CreateUserDto createUserDto;
 
         User mappedUser;
 
@@ -52,16 +52,16 @@ class UserServiceTest {
 
         @BeforeEach
         void setUp() {
-            newUserDto = new NewUserDto(
+            createUserDto = new CreateUserDto(
                     "John Doe",
                     "john.doe@test.com",
                     "password123"
             );
 
             mappedUser = User.builder()
-                    .name(newUserDto.name())
-                    .email(newUserDto.email())
-                    .password(newUserDto.password())
+                    .name(createUserDto.name())
+                    .email(createUserDto.email())
+                    .password(createUserDto.password())
                     .build();
 
             userWithExistentEmail = User.builder()
@@ -77,10 +77,10 @@ class UserServiceTest {
         @Test
         void shouldCreateUser() {
             // Arrange
-            when(userRepository.findByEmail(newUserDto.email()))
+            when(userRepository.findByEmail(createUserDto.email()))
                     .thenReturn(Optional.empty());
 
-            when(userMapper.mapToEntity(newUserDto))
+            when(userMapper.mapToEntity(createUserDto))
                     .thenReturn(mappedUser);
 
             String hashedPassword = passwordEncoder.encode(mappedUser.getPassword());
@@ -97,7 +97,7 @@ class UserServiceTest {
                     .thenReturn(mappedUser);
 
             // Act
-            UUID userId = underTest.createUser(newUserDto);
+            UUID userId = underTest.createUser(createUserDto);
 
             // Assert
             verify(userRepository).save(userCaptor.capture());
@@ -112,16 +112,16 @@ class UserServiceTest {
         @Test
         void shouldThrowExceptionWhenEmailAlreadyExists() {
             // Arrange
-            when(userRepository.findByEmail(newUserDto.email()))
+            when(userRepository.findByEmail(createUserDto.email()))
                     .thenReturn(Optional.of(userWithExistentEmail));
 
             String expectedExceptionMessage = "User with email " + userWithExistentEmail.getEmail() + " already exists";
 
             // Act and Assert
-            Throwable ex = assertThrows(EntityAlreadyExistsException.class, () -> underTest.createUser(newUserDto));
+            Throwable ex = assertThrows(EntityAlreadyExistsException.class, () -> underTest.createUser(createUserDto));
 
             // Assert
-            verify(userRepository).findByEmail(newUserDto.email());
+            verify(userRepository).findByEmail(createUserDto.email());
             assertEquals(expectedExceptionMessage, ex.getMessage());
         }
     }

@@ -1,7 +1,7 @@
 package com.erico.accessmanagement.business.controller;
 
 
-import com.erico.accessmanagement.business.dto.NewUserDto;
+import com.erico.accessmanagement.business.dto.CreateUserDto;
 import com.erico.accessmanagement.business.exception.EntityAlreadyExistsException;
 import com.erico.accessmanagement.business.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -49,19 +49,19 @@ class UserControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
-    NewUserDto newUserDto;
+    CreateUserDto createUserDto;
 
     @BeforeEach()
     void setUp() {
-        newUserDto = new NewUserDto("John Doe", "john.doe@test.com", "password123");
+        createUserDto = new CreateUserDto("John Doe", "john.doe@test.com", "password123");
     }
 
     @Test
     void whenCreateUser_thenReturn201CreatedStatusWithLocationHeader() throws Exception {
         UUID userId = UUID.randomUUID();
-        Mockito.when(userService.createUser(Mockito.eq(newUserDto))).thenReturn(userId);
+        Mockito.when(userService.createUser(Mockito.eq(createUserDto))).thenReturn(userId);
 
-        String requestBody = objectMapper.writeValueAsString(newUserDto);
+        String requestBody = objectMapper.writeValueAsString(createUserDto);
 
         mockMvc.perform(post("/v1/users")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -74,12 +74,12 @@ class UserControllerTest {
 
     @Test
     void whenCreateUser_thenThrow409ConflictStatusWithErrorMessage() throws Exception {
-        String requestBody = objectMapper.writeValueAsString(newUserDto);
-        String expectedErrorMessage = "User with email " + newUserDto.email() + " already exists";
+        String requestBody = objectMapper.writeValueAsString(createUserDto);
+        String expectedErrorMessage = "User with email " + createUserDto.email() + " already exists";
 
         Mockito.doThrow(new EntityAlreadyExistsException(expectedErrorMessage))
                 .when(userService)
-                .createUser(Mockito.eq(newUserDto));
+                .createUser(Mockito.eq(createUserDto));
 
         mockMvc.perform(post("/v1/users").contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isConflict())
@@ -88,7 +88,7 @@ class UserControllerTest {
 
     @Test
     void whenCreateUser_thenThrow422UnprocessableEntityStatusWithFieldErrors() throws Exception {
-        NewUserDto userWithWrongFields = new NewUserDto("", "john.doe", "pass");
+        CreateUserDto userWithWrongFields = new CreateUserDto("", "john.doe", "pass");
         String requestBody = objectMapper.writeValueAsString(userWithWrongFields);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/v1/users").contentType(MediaType.APPLICATION_JSON).content(requestBody))

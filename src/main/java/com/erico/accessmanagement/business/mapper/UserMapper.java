@@ -1,6 +1,6 @@
 package com.erico.accessmanagement.business.mapper;
 
-import com.erico.accessmanagement.business.dto.NewUserDto;
+import com.erico.accessmanagement.business.dto.CreateUserDto;
 import com.erico.accessmanagement.business.model.User;
 import org.mapstruct.Mapper;
 
@@ -17,7 +17,7 @@ public interface UserMapper {
             @Mapping(target = "id", ignore = true),
             @Mapping(target = "role", ignore = true),
             @Mapping(target = "approved", ignore = true),
-            @Mapping(target = "registrationStatus", ignore = true)
+            @Mapping(target = "status", ignore = true)
     })
-    User mapToEntity(NewUserDto newUserDto);
+    User mapToEntity(CreateUserDto createUserDto);
 }
