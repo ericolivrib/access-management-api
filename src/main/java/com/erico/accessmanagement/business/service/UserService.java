@@ -3,11 +3,7 @@ package com.erico.accessmanagement.business.service;
 import com.erico.accessmanagement.business.dto.NewUserDto;
 import com.erico.accessmanagement.business.exception.EntityAlreadyExistsException;
 import com.erico.accessmanagement.business.mapper.UserMapper;
-import com.erico.accessmanagement.business.model.RegistrationStatus;
-import com.erico.accessmanagement.business.model.Role;
-import com.erico.accessmanagement.business.model.RoleLabel;
-import com.erico.accessmanagement.business.model.User;
-import com.erico.accessmanagement.business.repository.RoleRepository;
+import com.erico.accessmanagement.business.model.*;
 import com.erico.accessmanagement.business.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,7 +17,6 @@ import java.util.UUID;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
 
@@ -31,12 +26,9 @@ public class UserService {
             throw new EntityAlreadyExistsException("User with email " + u.getEmail() + " already exists");
         });
 
-        Role commonRole = roleRepository.getReferenceByLabel(RoleLabel.USER);
-
         User user = userMapper.mapToEntity(newUserDto);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRole(commonRole);
-        user.setRegistrationStatus(RegistrationStatus.NOT_CONFIRMED);
+        user.setRole(Role.USER);
 
         userRepository.save(user);
         return user.getId();

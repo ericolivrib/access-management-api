@@ -22,7 +22,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("E-mail or password incorrect"));
 
-        String role = user.getRole().getLabel().name();
+        String role = user.getRole().name();
 
         return withUsername(email).password(user.getPassword())
                 .roles(role)

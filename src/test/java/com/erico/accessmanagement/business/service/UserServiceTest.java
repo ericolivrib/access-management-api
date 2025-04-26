@@ -3,11 +3,7 @@ package com.erico.accessmanagement.business.service;
 import com.erico.accessmanagement.business.dto.NewUserDto;
 import com.erico.accessmanagement.business.exception.EntityAlreadyExistsException;
 import com.erico.accessmanagement.business.mapper.UserMapper;
-import com.erico.accessmanagement.business.model.RegistrationStatus;
-import com.erico.accessmanagement.business.model.Role;
-import com.erico.accessmanagement.business.model.RoleLabel;
-import com.erico.accessmanagement.business.model.User;
-import com.erico.accessmanagement.business.repository.RoleRepository;
+import com.erico.accessmanagement.business.model.*;
 import com.erico.accessmanagement.business.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -40,9 +36,6 @@ class UserServiceTest {
     UserRepository userRepository;
 
     @Mock
-    RoleRepository roleRepository;
-
-    @Mock
     UserMapper userMapper;
 
     @Captor
@@ -57,15 +50,8 @@ class UserServiceTest {
 
         User userWithExistentEmail;
 
-        Role commonRole;
-
         @BeforeEach
         void setUp() {
-            commonRole = Role.builder()
-                    .id(2)
-                    .label(RoleLabel.USER)
-                    .build();
-
             newUserDto = new NewUserDto(
                     "John Doe",
                     "john.doe@test.com",
@@ -84,18 +70,15 @@ class UserServiceTest {
                     .email("frank.ocean@test.com")
                     .password("$2a$12$VR7TNH9.v0CEO5nagSMNZ.cBmrjMPeCt92h94q/3DagC70vBKpiPS")
                     .approved(true)
-                    .role(commonRole)
+                    .role(Role.USER)
                     .build();
         }
 
         @Test
-        void shouldCreateCommonUser() {
+        void shouldCreateUser() {
             // Arrange
             when(userRepository.findByEmail(newUserDto.email()))
                     .thenReturn(Optional.empty());
-
-            when(roleRepository.getReferenceByLabel(RoleLabel.USER))
-                    .thenReturn(commonRole);
 
             when(userMapper.mapToEntity(newUserDto))
                     .thenReturn(mappedUser);
@@ -105,10 +88,10 @@ class UserServiceTest {
             when(passwordEncoder.encode(mappedUser.getPassword()))
                     .thenReturn(hashedPassword);
 
-            mappedUser.setRole(commonRole);
+            mappedUser.setRole(Role.USER);
             mappedUser.setPassword(passwordEncoder.encode(mappedUser.getPassword()));
             mappedUser.setId(UUID.randomUUID());
-            mappedUser.setRegistrationStatus(RegistrationStatus.NOT_CONFIRMED);
+            mappedUser.setStatus(UserStatus.NOT_CONFIRMED);
 
             when(userRepository.save(mappedUser))
                     .thenReturn(mappedUser);
@@ -120,9 +103,9 @@ class UserServiceTest {
             verify(userRepository).save(userCaptor.capture());
             assertNotNull(userCaptor.getValue().getId());
             assertEquals(userId, userCaptor.getValue().getId());
-            assertEquals(RoleLabel.USER, userCaptor.getValue().getRole().getLabel());
+            assertEquals(Role.USER, userCaptor.getValue().getRole());
             assertEquals(mappedUser.getPassword(), userCaptor.getValue().getPassword());
-            assertEquals(RegistrationStatus.NOT_CONFIRMED, userCaptor.getValue().getRegistrationStatus());
+            assertEquals(UserStatus.NOT_CONFIRMED, userCaptor.getValue().getStatus());
             assertNull(userCaptor.getValue().getApproved());
         }
 

@@ -1,7 +1,6 @@
 package com.erico.accessmanagement.auth.service;
 
 import com.erico.accessmanagement.business.model.Role;
-import com.erico.accessmanagement.business.model.RoleLabel;
 import com.erico.accessmanagement.business.model.User;
 import com.erico.accessmanagement.business.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -46,7 +45,7 @@ class CustomUserDetailsServiceTest {
                 .name("Érico Ribeiro")
                 .email(email)
                 .password(new BCryptPasswordEncoder().encode("123456"))
-                .role(new Role(2, RoleLabel.USER, null))
+                .role(Role.USER)
                 .approved(true)
                 .build();
     }
@@ -66,11 +65,11 @@ class CustomUserDetailsServiceTest {
         assertEquals(email, userDetails.getUsername());
         assertEquals(user.getPassword(), userDetails.getPassword());
         assertTrue(user.getApproved());
-        assertTrue(userDetails.getAuthorities()
-                .stream()
-                .allMatch(authority ->
-                        authority.getAuthority().equals("ROLE_" + user.getRole().getLabel())));
+        userDetails.getAuthorities().forEach(a -> System.out.println(a.getAuthority()));
+        System.out.println(user.getRole());
+        assertEquals(Role.USER.name(), userDetails.getAuthorities().iterator().next().getAuthority());
     }
+
 
     @Test
     void shouldThrowExceptionWhenUserNotFound() {

@@ -30,11 +30,11 @@ public class User {
     @Column(name = "approved")
     private Boolean approved;
 
-    @Column(name = "registration_status")
+    @Column(name = "status")
     @Enumerated(EnumType.STRING)
-    private RegistrationStatus registrationStatus;
+    private UserStatus status;
 
-    @ManyToOne
-    @JoinColumn(name = "role_id")
+    @Column(name = "role")
+    @Enumerated(EnumType.STRING)
     private Role role;
 }
