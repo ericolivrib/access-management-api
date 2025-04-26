@@ -1,4 +1,4 @@
-package com.erico.accessmanagement.business.global;
+package com.erico.accessmanagement.common;
 
 import com.erico.accessmanagement.business.dto.ErrorResponseDto;
 import com.erico.accessmanagement.business.dto.FieldErrorsResponseDto;
