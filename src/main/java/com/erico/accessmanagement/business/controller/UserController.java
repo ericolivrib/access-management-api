@@ -1,5 +1,6 @@
 package com.erico.accessmanagement.business.controller;
 
+import com.erico.accessmanagement.business.documentation.UserControllerDocumentation;
 import com.erico.accessmanagement.business.dto.CreateUserDto;
 import com.erico.accessmanagement.business.service.UserService;
 import jakarta.validation.Valid;
@@ -18,7 +19,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @RestController
 @RequestMapping("/v1/users")
-public class UserController {
+public class UserController implements UserControllerDocumentation {
 
     private final UserService userService;
 

@@ -1,10 +1,11 @@
 package com.erico.accessmanagement.business.dto;
 
+import com.erico.accessmanagement.business.documentation.CreateUserDtoDocumentation;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-public record CreateUserDto(
+public record CreateUserDto (
         @NotBlank
         String name,
 
@@ -16,5 +17,5 @@ public record CreateUserDto(
         @NotBlank
         @Size(min = 8)
         String password
-) {
+) implements CreateUserDtoDocumentation {
 }
