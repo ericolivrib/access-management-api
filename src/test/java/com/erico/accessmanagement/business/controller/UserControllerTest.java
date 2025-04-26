@@ -1,9 +1,9 @@
 package com.erico.accessmanagement.business.controller;
 
 
-import com.erico.accessmanagement.business.dto.CreateUserDto;
-import com.erico.accessmanagement.business.exception.EntityAlreadyExistsException;
-import com.erico.accessmanagement.business.service.UserService;
+import com.erico.accessmanagement.dto.CreateUserDto;
+import com.erico.accessmanagement.exception.EntityAlreadyExistsException;
+import com.erico.accessmanagement.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.hamcrest.Matchers;

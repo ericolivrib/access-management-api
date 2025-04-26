@@ -1,8 +1,9 @@
 package com.erico.accessmanagement.auth.service;
 
-import com.erico.accessmanagement.business.model.Role;
-import com.erico.accessmanagement.business.model.User;
-import com.erico.accessmanagement.business.repository.UserRepository;
+import com.erico.accessmanagement.model.Role;
+import com.erico.accessmanagement.model.User;
+import com.erico.accessmanagement.repository.UserRepository;
+import com.erico.accessmanagement.service.CustomUserDetailsService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

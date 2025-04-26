@@ -1,10 +1,13 @@
 package com.erico.accessmanagement.business.service;
 
-import com.erico.accessmanagement.business.dto.CreateUserDto;
-import com.erico.accessmanagement.business.exception.EntityAlreadyExistsException;
-import com.erico.accessmanagement.business.mapper.UserMapper;
-import com.erico.accessmanagement.business.model.*;
-import com.erico.accessmanagement.business.repository.UserRepository;
+import com.erico.accessmanagement.dto.CreateUserDto;
+import com.erico.accessmanagement.exception.EntityAlreadyExistsException;
+import com.erico.accessmanagement.mapper.UserMapper;
+import com.erico.accessmanagement.model.Role;
+import com.erico.accessmanagement.model.User;
+import com.erico.accessmanagement.model.UserStatus;
+import com.erico.accessmanagement.repository.UserRepository;
+import com.erico.accessmanagement.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
