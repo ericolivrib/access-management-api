@@ -2,20 +2,16 @@ package com.erico.accessmanagement.mapper;
 
 import com.erico.accessmanagement.dto.CreateUserDto;
 import com.erico.accessmanagement.model.User;
-import org.mapstruct.Mapper;
+import org.springframework.stereotype.Component;
 
-import static org.mapstruct.MappingConstants.ComponentModel;
+@Component
+public class UserMapper {
 
-import org.mapstruct.ReportingPolicy;
-
-@Mapper(componentModel = ComponentModel.SPRING, unmappedTargetPolicy = ReportingPolicy.ERROR)
-public interface UserMapper {
-
-//    @Mappings(value = {
-//            @Mapping(target = "id", ignore = true),
-//            @Mapping(target = "role", ignore = true),
-//            @Mapping(target = "approved", ignore = true),
-//            @Mapping(target = "status", ignore = true)
-//    })
-    User mapToEntity(CreateUserDto createUserDto);
+    public User mapToEntity(CreateUserDto dto) {
+        return User.builder()
+                .name(dto.name())
+                .email(dto.email())
+                .password(dto.password())
+                .build();
+    }
 }

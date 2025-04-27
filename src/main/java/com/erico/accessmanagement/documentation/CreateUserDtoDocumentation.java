@@ -8,7 +8,7 @@ public interface CreateUserDtoDocumentation {
     @Schema(description = "Nome do usuário", example = "John Doe")
     String name();
 
-    @Schema(description = "E-mail do usuário", example = "john.doa@test.com")
+    @Schema(description = "E-mail do usuário", example = "john.doe@test.com")
     String email();
 
     @Schema(description = "Senha de acesso usuário", example = "password123")

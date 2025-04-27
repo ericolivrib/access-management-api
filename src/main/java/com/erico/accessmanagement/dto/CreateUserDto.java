@@ -6,16 +6,16 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 public record CreateUserDto (
-        @NotBlank
+        @NotBlank(message = "Nome não pode estar vazio")
         String name,
 
-        @Email
-        @NotBlank
+        @Email(message = "Formato de e-mail inválido")
+        @NotBlank(message = "E-mail não pode estar vazio")
         String email,
 
         // TODO: Create RegEx for password
-        @NotBlank
-        @Size(min = 8)
+        @NotBlank(message = "Senha não pode estar vazia")
+        @Size(min = 8, message = "A senha deve ter, no mínimo, 8 caracteres")
         String password
 ) implements CreateUserDtoDocumentation {
 }

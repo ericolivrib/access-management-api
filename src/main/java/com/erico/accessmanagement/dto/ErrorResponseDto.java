@@ -1,4 +1,6 @@
 package com.erico.accessmanagement.dto;
 
-public record ErrorResponseDto(String message) {
+import com.erico.accessmanagement.documentation.ErrorResponseDtoDocumentation;
+
+public record ErrorResponseDto(String message) implements ErrorResponseDtoDocumentation {
 }
