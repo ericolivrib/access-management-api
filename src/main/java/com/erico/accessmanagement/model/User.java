@@ -41,4 +41,7 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Permission> permissions;
+
+    @OneToMany(mappedBy = "user")
+    private List<ConfirmationCode> confirmationCodes;
 }
