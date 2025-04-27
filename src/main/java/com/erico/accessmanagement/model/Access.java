@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Data
 @Builder
@@ -21,4 +23,7 @@ public class Access {
 
     @Column(name = "access_label")
     private String label;
+
+    @OneToMany(mappedBy = "access")
+    private List<Permission> permissions;
 }
