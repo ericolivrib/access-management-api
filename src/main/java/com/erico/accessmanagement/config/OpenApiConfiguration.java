@@ -18,10 +18,10 @@ import io.swagger.v3.oas.annotations.servers.Server;
         ),
         servers = {
                 @Server(description = "Local Server", url = "http://localhost:8080/v1")
-        },
-        security = @SecurityRequirement(name = "bearerAuth")
-
+        }
 )
-@SecurityScheme(name = "bearerAuth", description = "Autenticação via token JWT", scheme = "bearer", type = SecuritySchemeType.HTTP, bearerFormat = "JWT", in = SecuritySchemeIn.HEADER)
+@SecurityScheme(name = OpenApiConfiguration.SECURITY_SCHEME, description = "Autenticação via token JWT", scheme = "bearer", type = SecuritySchemeType.HTTP, bearerFormat = "JWT", in = SecuritySchemeIn.HEADER)
 public class OpenApiConfiguration {
+
+    public static final String SECURITY_SCHEME = "bearerAuth";
 }

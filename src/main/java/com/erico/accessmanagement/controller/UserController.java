@@ -8,10 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.UUID;
@@ -24,6 +21,7 @@ public class UserController implements UserControllerDocumentation {
     private final UserService userService;
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Void> createUser(@RequestBody @Valid CreateUserDto createUserDto, UriComponentsBuilder uriBuilder) {
         UUID userId = userService.createUser(createUserDto);
 
@@ -32,5 +30,13 @@ public class UserController implements UserControllerDocumentation {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .header(HttpHeaders.LOCATION, uri)
                 .build();
+    }
+
+    @GetMapping("/confirm")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public ResponseEntity<Void> confirmUser(@RequestParam("code") UUID codeId) {
+        userService.confirmUser(codeId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        // TODO: Redirecionar para página em branco.
     }
 }
