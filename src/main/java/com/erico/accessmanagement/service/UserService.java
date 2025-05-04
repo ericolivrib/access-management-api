@@ -37,7 +37,7 @@ public class UserService {
     @Transactional
     public UUID createUser(CreateUserDto createUserDto) {
         userRepository.findByEmail(createUserDto.email()).ifPresent((u) -> {
-            throw new ResourceConflictException("User with email " + u.getEmail() + " already exists");
+            throw new ResourceConflictException("Já existe um usuário com o email " + u.getEmail());
         });
 
         User user = userMapper.mapToEntity(createUserDto);

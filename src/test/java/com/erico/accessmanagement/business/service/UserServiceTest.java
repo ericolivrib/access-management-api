@@ -118,7 +118,7 @@ class UserServiceTest {
             when(userRepository.findByEmail(createUserDto.email()))
                     .thenReturn(Optional.of(userWithExistentEmail));
 
-            String expectedExceptionMessage = "User with email " + userWithExistentEmail.getEmail() + " already exists";
+            String expectedExceptionMessage = "Já existe um usuário com o email" + createUserDto.email();
 
             // Act and Assert
             Throwable ex = assertThrows(ResourceConflictException.class, () -> underTest.createUser(createUserDto));
@@ -127,5 +127,8 @@ class UserServiceTest {
             verify(userRepository).findByEmail(createUserDto.email());
             assertEquals(expectedExceptionMessage, ex.getMessage());
         }
+
+        // TODO: testar criação de código de confirmação
+        // TODO: testar envio de email
     }
 }
