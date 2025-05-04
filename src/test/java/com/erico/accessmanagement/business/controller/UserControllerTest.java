@@ -2,7 +2,7 @@ package com.erico.accessmanagement.business.controller;
 
 
 import com.erico.accessmanagement.dto.CreateUserDto;
-import com.erico.accessmanagement.exception.EntityAlreadyExistsException;
+import com.erico.accessmanagement.exception.ResourceConflictException;
 import com.erico.accessmanagement.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -77,7 +77,7 @@ class UserControllerTest {
         String requestBody = objectMapper.writeValueAsString(createUserDto);
         String expectedErrorMessage = "User with email " + createUserDto.email() + " already exists";
 
-        Mockito.doThrow(new EntityAlreadyExistsException(expectedErrorMessage))
+        Mockito.doThrow(new ResourceConflictException(expectedErrorMessage))
                 .when(userService)
                 .createUser(Mockito.eq(createUserDto));
 

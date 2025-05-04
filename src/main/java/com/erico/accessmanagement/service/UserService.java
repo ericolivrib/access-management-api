@@ -1,7 +1,7 @@
 package com.erico.accessmanagement.service;
 
 import com.erico.accessmanagement.dto.CreateUserDto;
-import com.erico.accessmanagement.exception.EntityAlreadyExistsException;
+import com.erico.accessmanagement.exception.ResourceConflictException;
 import com.erico.accessmanagement.mapper.UserMapper;
 import com.erico.accessmanagement.model.ConfirmationCode;
 import com.erico.accessmanagement.model.Role;
@@ -34,7 +34,7 @@ public class UserService {
     @Transactional
     public UUID createUser(CreateUserDto createUserDto) {
         userRepository.findByEmail(createUserDto.email()).ifPresent((u) -> {
-            throw new EntityAlreadyExistsException("User with email " + u.getEmail() + " already exists");
+            throw new ResourceConflictException("User with email " + u.getEmail() + " already exists");
         });
 
         User user = userMapper.mapToEntity(createUserDto);

@@ -1,7 +1,7 @@
 package com.erico.accessmanagement.business.service;
 
 import com.erico.accessmanagement.dto.CreateUserDto;
-import com.erico.accessmanagement.exception.EntityAlreadyExistsException;
+import com.erico.accessmanagement.exception.ResourceConflictException;
 import com.erico.accessmanagement.mapper.UserMapper;
 import com.erico.accessmanagement.model.Role;
 import com.erico.accessmanagement.model.User;
@@ -121,7 +121,7 @@ class UserServiceTest {
             String expectedExceptionMessage = "User with email " + userWithExistentEmail.getEmail() + " already exists";
 
             // Act and Assert
-            Throwable ex = assertThrows(EntityAlreadyExistsException.class, () -> underTest.createUser(createUserDto));
+            Throwable ex = assertThrows(ResourceConflictException.class, () -> underTest.createUser(createUserDto));
 
             // Assert
             verify(userRepository).findByEmail(createUserDto.email());

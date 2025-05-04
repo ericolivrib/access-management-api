@@ -2,7 +2,7 @@ package com.erico.accessmanagement.global;
 
 import com.erico.accessmanagement.dto.ErrorResponseDto;
 import com.erico.accessmanagement.dto.FieldErrorsResponseDto;
-import com.erico.accessmanagement.exception.EntityAlreadyExistsException;
+import com.erico.accessmanagement.exception.ResourceConflictException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(EntityAlreadyExistsException.class)
+    @ExceptionHandler(ResourceConflictException.class)
     public ResponseEntity<ErrorResponseDto> handleConflict(Exception ex) {
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(new ErrorResponseDto(ex.getMessage()));
