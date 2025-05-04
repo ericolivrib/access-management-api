@@ -36,6 +36,5 @@ public class UserController implements UserControllerSpec {
     public ResponseEntity<Void> confirmUser(@RequestParam("code") UUID codeId) {
         userService.confirmUser(codeId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        // TODO: Redirecionar para página em branco.
     }
 }

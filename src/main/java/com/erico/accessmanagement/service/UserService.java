@@ -2,6 +2,8 @@ package com.erico.accessmanagement.service;
 
 import com.erico.accessmanagement.dto.CreateUserDto;
 import com.erico.accessmanagement.exception.ResourceConflictException;
+import com.erico.accessmanagement.exception.ResourceGoneException;
+import com.erico.accessmanagement.exception.ResourceNotFoundException;
 import com.erico.accessmanagement.mapper.UserMapper;
 import com.erico.accessmanagement.model.ConfirmationCode;
 import com.erico.accessmanagement.model.Role;
@@ -10,6 +12,7 @@ import com.erico.accessmanagement.model.UserStatus;
 import com.erico.accessmanagement.repository.ConfirmationCodeRepository;
 import com.erico.accessmanagement.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Example;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -63,14 +66,14 @@ public class UserService {
     @Transactional
     public void confirmUser(UUID codeId) {
         ConfirmationCode code = confirmationCodeRepository.findById(codeId)
-                .orElseThrow(() -> new IllegalArgumentException("Código de confirmação inválido"));
+                .orElseThrow(() -> new ResourceNotFoundException("Código de confirmação inválido"));
 
         if (code.isConfirmed()) {
             return;
         }
 
         if (code.getExpiresIn().isBefore(Instant.now())) {
-            throw new ResponseStatusException(HttpStatus.GONE, "Usuário com prazo de confirmação expirado.");
+            throw new ResourceGoneException("Usuário com prazo de confirmação expirado");
         }
 
         code.setConfirmed(true);
