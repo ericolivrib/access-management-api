@@ -1,6 +1,5 @@
-package com.erico.accessmanagement.documentation;
+package com.erico.accessmanagement.controller;
 
-import com.erico.accessmanagement.config.OpenApiConfiguration;
 import com.erico.accessmanagement.dto.CreateUserDto;
 import com.erico.accessmanagement.dto.ErrorResponseDto;
 import com.erico.accessmanagement.dto.FieldErrorsResponseDto;
@@ -10,7 +9,6 @@ import io.swagger.v3.oas.annotations.headers.Header;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -20,7 +18,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.util.UUID;
 
 @Tag(name = "Users", description = "Usuários do sistema")
-public interface UserControllerDocumentation {
+public interface UserControllerSpec {
 
     @Operation(
             summary = "Criar usuário",

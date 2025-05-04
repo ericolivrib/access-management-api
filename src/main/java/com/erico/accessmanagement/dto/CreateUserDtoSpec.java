@@ -1,9 +1,9 @@
-package com.erico.accessmanagement.documentation;
+package com.erico.accessmanagement.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(description = "Dados de cadastro de usuário")
-public interface CreateUserDtoDocumentation {
+public interface CreateUserDtoSpec {
 
     @Schema(description = "Nome do usuário", example = "John Doe")
     String name();

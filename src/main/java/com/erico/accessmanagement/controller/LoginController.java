@@ -1,6 +1,5 @@
 package com.erico.accessmanagement.controller;
 
-import com.erico.accessmanagement.documentation.LoginControllerDocumentation;
 import com.erico.accessmanagement.dto.SignInDto;
 import com.erico.accessmanagement.dto.JwtResponseDto;
 import com.erico.accessmanagement.service.JwtService;
@@ -17,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/v1/login")
-public class LoginController implements LoginControllerDocumentation {
+public class LoginController implements LoginControllerSpec {
 
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;

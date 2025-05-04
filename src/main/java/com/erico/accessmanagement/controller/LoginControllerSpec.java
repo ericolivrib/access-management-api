@@ -1,4 +1,4 @@
-package com.erico.accessmanagement.documentation;
+package com.erico.accessmanagement.controller;
 
 import com.erico.accessmanagement.dto.FieldErrorsResponseDto;
 import com.erico.accessmanagement.dto.JwtResponseDto;
@@ -13,7 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
 @Tag(name = "Login", description = "Log-in do sistema")
-public interface LoginControllerDocumentation {
+public interface LoginControllerSpec {
 
     @Operation(
             summary = "Log-in de usuário",

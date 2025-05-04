@@ -1,9 +1,9 @@
-package com.erico.accessmanagement.documentation;
+package com.erico.accessmanagement.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(description = "Erros dos campos de dados de requisição")
-public interface FieldErrorsResponseDtoDocumentation {
+public interface FieldErrorsResponseDtoSpec {
     @Schema(description = "Nome do campo", example = "password")
     String field();
 

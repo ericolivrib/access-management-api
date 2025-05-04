@@ -1,6 +1,5 @@
 package com.erico.accessmanagement.dto;
 
-import com.erico.accessmanagement.documentation.SignInDtoDocumentation;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
@@ -11,5 +10,5 @@ public record SignInDto(
 
         @NotBlank(message = "E-mail não pode estar vazio")
         String password
-) implements SignInDtoDocumentation {
+) implements SignInDtoSpec {
 }
