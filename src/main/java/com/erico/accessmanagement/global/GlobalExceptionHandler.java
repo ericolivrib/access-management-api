@@ -3,6 +3,7 @@ package com.erico.accessmanagement.global;
 import com.erico.accessmanagement.dto.ErrorResponseDto;
 import com.erico.accessmanagement.dto.FieldErrorsResponseDto;
 import com.erico.accessmanagement.exception.ResourceConflictException;
+import com.erico.accessmanagement.exception.ResourceGoneException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -18,6 +19,18 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ResourceConflictException.class)
     public ResponseEntity<ErrorResponseDto> handleConflict(Exception ex) {
         return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(new ErrorResponseDto(ex.getMessage()));
+    }
+
+    @ExceptionHandler(ResourceGoneException.class)
+    public ResponseEntity<ErrorResponseDto> handleGone(Exception ex) {
+        return ResponseEntity.status(HttpStatus.GONE)
+                .body(new ErrorResponseDto(ex.getMessage()));
+    }
+
+    @ExceptionHandler(ResourceGoneException.class)
+    public ResponseEntity<ErrorResponseDto> handleNotFound(Exception ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(new ErrorResponseDto(ex.getMessage()));
     }
 
