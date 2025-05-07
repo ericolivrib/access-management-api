@@ -38,3 +38,5 @@ build/
 ### Chaves de criptografia do JWT ###
 /src/main/resources/private.pem
 /src/main/resources/public.pem
+
+/Access Management API
