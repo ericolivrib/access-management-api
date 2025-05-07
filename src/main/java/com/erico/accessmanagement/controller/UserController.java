@@ -1,6 +1,7 @@
 package com.erico.accessmanagement.controller;
 
 import com.erico.accessmanagement.dto.CreateUserDto;
+import com.erico.accessmanagement.dto.UserResponseDto;
 import com.erico.accessmanagement.service.UserService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.List;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -36,5 +38,12 @@ public class UserController implements UserControllerSpec {
     public ResponseEntity<Void> confirmUser(@RequestParam("code") UUID codeId) {
         userService.confirmUser(codeId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<List<UserResponseDto>> getUsers() {
+        List<UserResponseDto> users = userService.getUsers();
+        return ResponseEntity.ok(users);
     }
 }

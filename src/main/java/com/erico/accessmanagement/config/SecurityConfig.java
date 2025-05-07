@@ -28,6 +28,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/v1/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/v1/users").permitAll()
                         .requestMatchers(HttpMethod.GET, "/v1/users/confirm").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/v1/users").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .build();
     }

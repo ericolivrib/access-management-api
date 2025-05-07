@@ -1,6 +1,7 @@
 package com.erico.accessmanagement.service;
 
 import com.erico.accessmanagement.dto.CreateUserDto;
+import com.erico.accessmanagement.dto.UserResponseDto;
 import com.erico.accessmanagement.exception.ResourceConflictException;
 import com.erico.accessmanagement.exception.ResourceGoneException;
 import com.erico.accessmanagement.exception.ResourceNotFoundException;
@@ -12,14 +13,12 @@ import com.erico.accessmanagement.model.UserStatus;
 import com.erico.accessmanagement.repository.ConfirmationCodeRepository;
 import com.erico.accessmanagement.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Example;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -82,5 +81,12 @@ public class UserService {
         User user = code.getUser();
         user.setStatus(UserStatus.PENDING_APPROVAL);
         userRepository.save(user);
+    }
+
+    public List<UserResponseDto> getUsers() {
+        List<User> users = userRepository.findAll();
+        return users.stream()
+                .map(userMapper::mapToDto)
+                .toList();
     }
 }

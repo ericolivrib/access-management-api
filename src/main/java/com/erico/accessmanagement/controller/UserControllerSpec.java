@@ -1,20 +1,27 @@
 package com.erico.accessmanagement.controller;
 
+import com.erico.accessmanagement.config.OpenApiConfiguration;
 import com.erico.accessmanagement.dto.CreateUserDto;
 import com.erico.accessmanagement.dto.ErrorResponseDto;
 import com.erico.accessmanagement.dto.FieldErrorsResponseDto;
+import com.erico.accessmanagement.dto.UserResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.headers.Header;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.List;
 import java.util.UUID;
 
 @Tag(name = "Users", description = "Usuários do sistema")
@@ -48,9 +55,25 @@ public interface UserControllerSpec {
             ),
             responses = {
                     @ApiResponse(responseCode = "204", description = "Código confirmado com sucesso"),
-                    @ApiResponse(responseCode = "410", description = "Código com tempo limite expirado"),
-                    @ApiResponse(responseCode = "404", description = "Código de confirmação não encontrado")
+                    @ApiResponse(responseCode = "410", description = "Código com tempo limite expirado", content = {
+                            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDto.class))
+                    }),
+                    @ApiResponse(responseCode = "404", description = "Código de confirmação não encontrado", content = {
+                            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDto.class))
+                    })
             }
     )
     ResponseEntity<Void> confirmUser(UUID codeId);
+
+    @Operation(
+            summary = "Usuários",
+            description = "Busca todos os usuários",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Lista de usuários recuperada com sucesso", content = {
+                            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, array = @ArraySchema(arraySchema = @Schema(implementation = UserResponseDto.class)))
+                    })
+            },
+            security = @SecurityRequirement(name = OpenApiConfiguration.SECURITY_SCHEME)
+    )
+    ResponseEntity<List<UserResponseDto>> getUsers();
 }
